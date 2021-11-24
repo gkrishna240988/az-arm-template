@@ -1,0 +1,82 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_Windows10_name": {
+            "defaultValue": "Windows10",
+            "type": "String"
+        },
+        "disks_Windows10_disk1_391f945297a44a089bd9388212f1ee12_externalid": {
+            "defaultValue": "/subscriptions/d58cc35a-4fd9-4d12-84c0-7d07db94b18f/resourceGroups/win-k3s-rg/providers/Microsoft.Compute/disks/Windows10_disk1_391f945297a44a089bd9388212f1ee12",
+            "type": "String"
+        },
+        "networkInterfaces_windows10885_externalid": {
+            "defaultValue": "/subscriptions/d58cc35a-4fd9-4d12-84c0-7d07db94b18f/resourceGroups/win-k3s-rg/providers/Microsoft.Network/networkInterfaces/windows10885",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2021-07-01",
+            "name": "[parameters('virtualMachines_Windows10_name')]",
+            "location": "eastus",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D2s_v3"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsDesktop",
+                        "offer": "Windows-10",
+                        "sku": "20h2-pro-g2",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_Windows10_name'), '_disk1_391f945297a44a089bd9388212f1ee12')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "StandardSSD_LRS",
+                            "id": "[parameters('disks_Windows10_disk1_391f945297a44a089bd9388212f1ee12_externalid')]"
+                        },
+                        "deleteOption": "Detach",
+                        "diskSizeGB": 127
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_Windows10_name')]",
+                    "adminUsername": "winadmin",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true,
+                        "patchSettings": {
+                            "patchMode": "AutomaticByOS",
+                            "assessmentMode": "ImageDefault",
+                            "enableHotpatching": false
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[parameters('networkInterfaces_windows10885_externalid')]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                },
+                "licenseType": "Windows_Client"
+            }
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_Windows10_name": {
+            "value": null
+        },
+        "disks_Windows10_disk1_391f945297a44a089bd9388212f1ee12_externalid": {
+            "value": null
+        },
+        "networkInterfaces_windows10885_externalid": {
+            "value": null
+        }
+    }
+}
